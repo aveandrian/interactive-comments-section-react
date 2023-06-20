@@ -13,3 +13,23 @@ body, #root {
   padding: 20px;
   background-color: hsl(228, 33%, 97%);
 }
+
+.comments-section {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  max-height: 90vh;
+  overflow: scroll;
+}
+
+.btn {
+  height: 40px;
+  width: 100px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  text-transform: uppercase;
+  background-color: hsl(238, 40%, 52%);
+}
