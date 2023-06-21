@@ -7,14 +7,72 @@ import './App.css'
 function App() {
   const currentUser = data.currentUser
   const [comments, setComments] = useState(data.comments)
+  const [newComment, setNewComment] = useState("")
+
+  function handleUpvote(id, isReply, parentId){
+    isReply ? 
+    setComments(comments => comments.map(comment => {
+      return comment.id == parentId ? 
+      {...comment, replies: comment.replies.map(reply => {
+        return reply.id == id ? {...reply, score: reply.score+1} : reply
+      })}
+      : comment
+    })) 
+    : setComments(comments => comments.map(comment => {
+      return comment.id == id ? {...comment, score: comment.score+1} : comment
+    }))
+  }
+
+  function handleDownvote(id, isReply, parentId){
+    isReply ? 
+    setComments(comments => comments.map(comment => {
+      return comment.id == parentId ? 
+      {...comment, replies: comment.replies.map(reply => {
+        return reply.id == id ? {...reply, score: reply.score-1} : reply
+      })}
+      : comment
+    })) 
+    : setComments(comments => comments.map(comment => {
+      return comment.id == id ? {...comment, score: comment.score-1} : comment
+    }))
+  }
+
+  function handleChangeNewComment(e){
+    setNewComment(e.target.value)
+  }
+
+  function handleAddComment(){
+    if(newComment == "")
+      return;
+    setComments(comments => [...comments,
+      {
+        id: nanoid(),
+        content: newComment,
+        createdAt:  "now",
+        score: 0,
+        user: currentUser,
+        replies: []
+      }]
+    )
+    setNewComment("")
+  }
+
+  function handleDelete(id, isReply, parentId){
+    isReply ?
+    setComments(comments => comments.map(comment => {
+      return comment.id == parentId ? 
+      {...comment, replies: comment.replies.filter(reply => reply.id != id )}
+      : comment
+    })) 
+    : setComments(comments => comments.filter(comment => comment.id != id ))
+  }
 
   function handleReply(parentId, content, toUser){   
-    console.log("To user", toUser)
     setComments(comments => comments.map(comment => {
       return comment.id ==  parentId ? {...comment, replies: [...comment.replies, 
         {
           id: nanoid(),
-          content: content,
+          content: content.startsWith("@" + toUser + " ") ? content.split("@" + toUser + " ")[1] : content,
           score: 0,
           replyingTo: toUser,
           user: currentUser,
@@ -25,12 +83,16 @@ function App() {
   }
 
   function updateComment(id, content, isReply, parentId){
-    console.log(id, content, isReply, parentId)
     isReply ? 
     setComments(comments => comments.map(comment => {
       return comment.id == parentId ? 
       {...comment, replies: comment.replies.map(reply => {
-        return reply.id == id ? {...reply, content: content} : reply
+        return reply.id == id ? 
+        {
+          ...reply, 
+          content: content.startsWith("@" + reply.replyingTo + " ") ? content.split("@" + reply.replyingTo + " ")[1] : content,
+        } 
+        : reply
       })}
       : comment
     })) 
@@ -38,10 +100,11 @@ function App() {
       return comment.id == id ? {...comment, content: content} : comment
     }))
   }
+  
 
-  console.log(comments)
   return (
     <>
+    
       <div className='comments-section'>
         {comments.map(comment => <Comment 
           currentUser={currentUser} 
@@ -51,7 +114,15 @@ function App() {
           parentId={comment.id} 
           handleReply={handleReply}
           updateComment={updateComment}
+          handleDelete={handleDelete}
+          handleUpvote={handleUpvote}
+          handleDownvote={handleDownvote}
         />)}
+      </div>
+      <div className='new-comment-section'>
+        <img className='current-user-avatar' src={currentUser.image.png}></img>
+        <textarea rows={4} className='new-comment-input' placeholder='Add a comment...' name='new-comment' value={newComment} onChange={handleChangeNewComment}></textarea>
+        <button className='new-comment-btn btn' onClick={handleAddComment}>Send</button>
       </div>
       <div className="attribution">
         Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
