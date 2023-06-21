@@ -82,6 +82,14 @@ body, #root {
   color: white;
 }
 
+.delete-modal-title {
+  color: hsl(212, 24%, 26%);
+  font-weight: 500;
+}
+
+.delete-modal-text {
+  color: hsl(211, 10%, 45%);
+}
 
 .new-comment-section {
   background-color: white;

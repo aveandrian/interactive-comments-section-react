@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import Comment from './components/Comment'
 import { nanoid } from 'nanoid'
 import data from './data.json'
-import { compareDates } from './compareDate'
 import './App.css'
 
 function App() {
@@ -116,11 +115,9 @@ function App() {
       return comment.id == id ? {...comment, content: content} : comment
     }))
   }
-  console.log(comments)
 
   return (
     <>
-    
       {comments &&<div className='comments-section'>
         {comments.map(comment => <Comment 
           currentUser={currentUser} 

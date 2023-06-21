@@ -85,6 +85,7 @@
 
 .comment-text  {
     grid-column: 2 / span 2;
+    color: hsl(211, 10%, 45%);
 }
 
 
@@ -129,6 +130,10 @@ textarea {
     border: 0.063rem solid black;
     border-radius: 0.625rem;
     resize: none;
+}
+
+textarea:focus {
+    outline: none
 }
 
 .edit-wrapper {
@@ -196,6 +201,7 @@ textarea {
         grid-row: 3;
         flex-direction: row;
         width: fit-content;
+        gap: 0.63rem;
     }
 
     .comment-text {
@@ -217,6 +223,10 @@ textarea {
 
     .comment-actions {
         grid-row: 3;
+    }
+
+    .comment-time {
+        font-size: 0.8rem;
     }
 
     .replying-section {
