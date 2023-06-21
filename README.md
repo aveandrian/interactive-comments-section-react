@@ -23,4 +23,4 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
+![image](https://github.com/aveandrian/interactive-comments-section-react/assets/13519212/f20d4017-a052-4689-960f-56bf098f8884)
