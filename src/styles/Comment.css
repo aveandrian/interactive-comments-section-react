@@ -219,6 +219,23 @@ textarea {
         grid-row: 3;
     }
 
+    .replying-section {
+        display: grid;
+    }
+
+    .comment-avatar {
+        grid-row: 2
+    }
+
+    .reply-edit {
+        margin-left: auto;
+        grid-row: 2
+    }
+
+    .reply-comment-text {
+        grid-column: 1 / span 2;
+    }
+
     .replies-section {
         width: 100%;
         display: grid;
