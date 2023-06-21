@@ -1,14 +1,30 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Comment from './components/Comment'
 import { nanoid } from 'nanoid'
 import data from './data.json'
+import { compareDates } from './compareDate'
 import './App.css'
 
 function App() {
   const currentUser = data.currentUser
-  const [comments, setComments] = useState(data.comments)
+  const [comments, setComments] = useState(null)
   const [newComment, setNewComment] = useState("")
 
+  useEffect(()=>{
+    let chatJson = window.localStorage.getItem('chatJson')
+    if(JSON.parse(chatJson)) {
+      setComments(JSON.parse(chatJson))
+    }
+    else {
+      setComments(data.comments)
+    }
+  }, [])
+
+  useEffect(()=>{
+    if(comments)
+      window.localStorage.setItem('chatJson', JSON.stringify(comments))
+  }, [comments])
+  
   function handleUpvote(id, isReply, parentId){
     isReply ? 
     setComments(comments => comments.map(comment => {
@@ -48,7 +64,7 @@ function App() {
       {
         id: nanoid(),
         content: newComment,
-        createdAt:  "now",
+        createdAt: new Date(),
         score: 0,
         user: currentUser,
         replies: []
@@ -76,7 +92,7 @@ function App() {
           score: 0,
           replyingTo: toUser,
           user: currentUser,
-          createdAt: 'now'
+          createdAt: new Date()
         }
       ]} : comment
     }))
@@ -100,12 +116,12 @@ function App() {
       return comment.id == id ? {...comment, content: content} : comment
     }))
   }
-  
+  console.log(comments)
 
   return (
     <>
     
-      <div className='comments-section'>
+      {comments &&<div className='comments-section'>
         {comments.map(comment => <Comment 
           currentUser={currentUser} 
           isReply={false} 
@@ -118,7 +134,7 @@ function App() {
           handleUpvote={handleUpvote}
           handleDownvote={handleDownvote}
         />)}
-      </div>
+      </div>}
       <div className='new-comment-section'>
         <img className='current-user-avatar' src={currentUser.image.png}></img>
         <textarea rows={4} className='new-comment-input' placeholder='Add a comment...' name='new-comment' value={newComment} onChange={handleChangeNewComment}></textarea>
@@ -126,7 +142,7 @@ function App() {
       </div>
       <div className="attribution">
         Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>. 
-        Coded by <a href="#">Your Name Here</a>.
+        Coded by <a href="https://github.com/aveandrian">aveandrian</a>.
       </div>
     </>
   )

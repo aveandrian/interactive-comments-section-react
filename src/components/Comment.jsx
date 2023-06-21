@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons'
+import { compareDates } from '../compareDate'
 import '../styles/Comment.css'
 
 export default function Comment(props){
@@ -61,7 +62,7 @@ export default function Comment(props){
                     <img className="comment-avatar" src={props.user.image.png}/>
                     <p className="comment-author">{props.user.username}</p>
                     {props.currentUser.username == props.user.username && <p className='self-tag'>you</p>}
-                    <p className="comment-time">{props.createdAt}</p>
+                    <p className="comment-time">{compareDates(props.createdAt)}</p>
                 </div>
                 <div className="comment-actions">
                     {props.currentUser.username == props.user.username ? 
